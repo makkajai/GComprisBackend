@@ -24,7 +24,7 @@ namespace GcomprisBackend.IntegrationTests
         private const string LogResource= "logs";
         private string _logResourceUrl;
 
-        private const string InsertTestUser =
+        private const string CreateTestUser =
             "insert into users(user_id, login, lastname, firstname) values (1000000, 'test', 'testlast', 'testfirst')";
 
         private const string DeleteLogs =
@@ -44,7 +44,7 @@ namespace GcomprisBackend.IntegrationTests
             //setup the test user
             using (var db = DbHelper.GetConnection())
             {
-                db.ExecuteSql(InsertTestUser);
+                db.ExecuteSql(CreateTestUser);
             }
 
             _logResourceUrl = ListeningOn + LogResource;
@@ -54,7 +54,6 @@ namespace GcomprisBackend.IntegrationTests
         public void DoesSendingSingleRecordWork()
         {
             //Given that a log is PUT, when we do GET for this user, do we receive the log back.
-
             var client = new JsonServiceClient();
 
             //1. PUT a new log record
