@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Collections.Generic;
+using System.Net;
 using GComprisBackend.ServiceModel;
 using GComprisBackend.ServiceModel.Types;
 using GComprisBackend.Web.Helpers;
@@ -32,7 +33,7 @@ namespace GcomprisBackend.IntegrationTests
         private const string DeleteTestUser = "delete from users where login = 'test'";
 
         private static readonly object SingleLogRecord 
-            = new LogRequest{Date = "2012-11-09 21:21:42", Duration = "74", Login = "test", BoardName = "algebra_by", Level = "1", SubLevel = "1", Status = "0"};
+            = new LogResource{Date = "2012-11-09 21:21:42", Duration = "74", Login = "test", BoardName = "algebra_by", Level = "1", SubLevel = "1", Status = "0"};
 
         [SetUp]
         public void SetUp()
@@ -59,6 +60,12 @@ namespace GcomprisBackend.IntegrationTests
             //1. PUT a new log record
             var response = client.Put<LogResponse>(_logResourceUrl, SingleLogRecord);
             Assert.IsTrue(response.Success);
+
+            //GET all the logs for the test user
+            var logResponse = client.Get<List<LogResource>>(string.Format("{0}/{1}", _logResourceUrl, "test"));
+
+            //Check whether the list has one record
+            Assert.AreEqual(1, logResponse.Count);
         }
 
         [TearDown]
