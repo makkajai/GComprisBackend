@@ -32,7 +32,7 @@ namespace GcomprisBackend.IntegrationTests
         private const string DeleteTestUser = "delete from users where login = 'test'";
 
         private static readonly object SingleLogRecord 
-            = new Log{Date = "2012-11-09 21:21:42", Duration = "74", Login = "test", BoardName = "algebra_by", Level = "1", SubLevel = "1", Status = "0"};
+            = new LogRequest{Date = "2012-11-09 21:21:42", Duration = "74", Login = "test", BoardName = "algebra_by", Level = "1", SubLevel = "1", Status = "0"};
 
         [SetUp]
         public void SetUp()

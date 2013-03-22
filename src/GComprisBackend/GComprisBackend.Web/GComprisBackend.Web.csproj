@@ -118,6 +118,12 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GComprisBackend.ServiceModel\GComprisBackend.ServiceModel.csproj">
+      <Project>{fb06c3aa-a6d6-43fe-acce-da4b92f211ad}</Project>
+      <Name>GComprisBackend.ServiceModel</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
