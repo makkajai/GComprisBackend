@@ -9,7 +9,6 @@ namespace GcomprisBackend.IntegrationTests
 {
     public class BaseTests
     {
-
         protected const string ListeningOn = "http://localhost:1337/";
 
         protected TestAppHostHttpListener AppHost;

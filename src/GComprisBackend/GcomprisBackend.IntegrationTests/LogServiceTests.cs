@@ -14,12 +14,17 @@ namespace GcomprisBackend.IntegrationTests
     /// around to be done
     /// </summary>
     [TestFixture]
-    public class LogServiceTests
+    public class LogServiceTests: BaseTests
     {
-        private const string InsertTestUser = "insert into users(user_id, login, lastname, firstname) values (1000, 'test', 'testlast', 'testfirst')";
+        private const string LogResource= "logs";
+        private string _logResourceUrl;
+
+        private const string InsertTestUser =
+            "insert into users(user_id, login, lastname, firstname) values (1000, 'test', 'testlast', 'testfirst')";
 
         private const string DeleteLogs =
             "delete from logs where user_id in (select user_id from users where login='test')";
+
         private const string DeleteTestUser = "delete from users where login = 'test'";
 
         [SetUp]
@@ -33,6 +38,14 @@ namespace GcomprisBackend.IntegrationTests
             {
                 db.ExecuteSql(InsertTestUser);
             }
+
+            _logResourceUrl = ListeningOn + LogResource;
+        }
+
+        [Test]
+        public void DoesSendingSingleRecordWork()
+        {
+            //Given that a log is PUT, when we do GET for this user, do we receive the log back.
         }
 
         [TearDown]
