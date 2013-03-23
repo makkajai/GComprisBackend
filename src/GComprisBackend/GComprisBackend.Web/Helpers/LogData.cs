@@ -63,7 +63,8 @@ namespace GComprisBackend.Web.Helpers
             "from logs l " +
             "inner join users u on l.user_id = u.user_id " +
             "inner join boards b on l.board_id = b.board_id " +
-            "where u.login = {0}";
+            "where u.login = {0}" +
+            "order by l.date desc";
 
         public static List<LogResource> GetByUser(string login)
         {

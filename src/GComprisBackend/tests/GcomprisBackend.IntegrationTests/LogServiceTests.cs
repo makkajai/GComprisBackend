@@ -124,8 +124,7 @@ namespace GcomprisBackend.IntegrationTests
 
             //check whether the list is as sent - note that the expected result is that logs are sorted
             //date-wise desc, so compare that way
-            Assert.AreEqual(MultiLogRecords.ToJson(), logResponse.ToJson());
-
+            Assert.AreEqual(MultiLogRecords.OrderByDescending(p=>p.Date).ToList().ToJson(), logResponse.ToJson());
         }
 
         [TearDown]
