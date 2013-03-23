@@ -71,9 +71,7 @@ namespace GcomprisBackend.IntegrationTests
             //Check whether the received record matches the sent record in Json format
             Assert.AreEqual(SingleLogRecord.ToJson(), logResponse.First().ToJson());
 
-            
-
-        }
+          }
 
         [TearDown]
         public void CleanUp()

@@ -7,12 +7,12 @@ using ServiceStack.WebHost.Endpoints;
 
 namespace GComprisBackend.Web
 {
-	public class AppHost : AppHostBase
-	{		
-		public AppHost() : base("GCompris-BackendService", typeof(AppHost).Assembly) { }
+    public class AppHost : AppHostBase
+    {	
+        public AppHost() : base("GCompris-BackendService", typeof(AppHost).Assembly) { }
 
-		public override void Configure(Container container)
-		{
+        public override void Configure(Container container)
+        {
             //TODO: change this
 		    LogManager.LogFactory = new ConsoleLogFactory();
 
@@ -23,7 +23,7 @@ namespace GComprisBackend.Web
 
             //configure ormlite
             ConfigureOrmLite();
-		}
+        }
 
         /// <summary>
         /// Configures the database connection string for use with ETL database
@@ -32,5 +32,5 @@ namespace GComprisBackend.Web
         {
             OrmLiteConfig.DialectProvider = PostgreSQLDialectProvider.Instance;
         }
-	}
+    }
 }
