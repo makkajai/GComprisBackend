@@ -168,3 +168,8 @@
 ('151','watercycle','3','Learn about the water cycle','Tux has come back from a long fishing party on his boat. Bring the water system back up so he can take a shower.','','Learn the water cycle'),
 ('152','wordprocessor','2','Your word processor','A simple word processor to enter and save any text','The children can type their own text or copy one given by the teacher.','Learn how to enter text in a wordprocessor. This wordprocessor is special in that it enforces the use of styles. This way, the children will understand their benefit when moving to more feature full wordprocessor like OpenOffice.org.'),
 ('153','wordsgame','2','Falling Words','Type the falling words before they reach the ground','Keyboard manipulation','Keyboard training')
+
+
+-- verify data
+
+Select * from boards
