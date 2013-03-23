@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using GComprisBackend.ServiceModel;
+﻿using GComprisBackend.ServiceModel;
 using GComprisBackend.Web.Helpers;
 using ServiceStack.ServiceInterface;
 
@@ -7,8 +6,6 @@ namespace GComprisBackend.Web
 {
     public class LogsService : Service
     {
-        private static List<LogResource> data = new List<LogResource>(); 
-
         /// <summary>
         /// Respond to the PUT request
         /// </summary>
