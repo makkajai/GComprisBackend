@@ -6,19 +6,19 @@ namespace GComprisBackend.ServiceModel
     [Route("/logs", "PUT")]
     public class LogResource
     {
-        public string Date { get; set; }
+        public DateTime Date { get; set; }
 
-        public string Duration { get; set; }
+        public int Duration { get; set; }
 
         public string Login { get; set; }
 
         public string BoardName { get; set; }
 
-        public string Level { get; set; }
+        public int Level { get; set; }
 
-        public string SubLevel { get; set; }
+        public int SubLevel { get; set; }
 
-        public string Status { get; set; }
+        public int Status { get; set; }
     }
 
     /// <summary>

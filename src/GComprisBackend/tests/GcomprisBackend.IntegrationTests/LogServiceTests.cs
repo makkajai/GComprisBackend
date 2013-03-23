@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using GComprisBackend.ServiceModel;
@@ -39,8 +40,8 @@ namespace GcomprisBackend.IntegrationTests
 
         private const string DeleteTestUser = "delete from users where login = 'test'";
 
-        private static readonly object SingleLogRecord 
-            = new LogResource{Date = "2012-11-09 21:21:42", Duration = "74", Login = "test", BoardName = "algebra_by", Level = "1", SubLevel = "1", Status = "0"};
+        private static readonly LogResource SingleLogRecord 
+            = new LogResource{Date = DateTime.Parse("2012-11-09 21:21:42"), Duration = 74, Login = "test", BoardName = "algebra_by", Level = 1, SubLevel = 1, Status = 0};
 
         [SetUp]
         public void SetUp()
@@ -62,6 +63,7 @@ namespace GcomprisBackend.IntegrationTests
         {
             //Given that a log is PUT, when we do GET for this user, do we receive the log back.
             var client = new JsonServiceClient();
+            Console.WriteLine("Json data being sent: {0}", SingleLogRecord.ToJson());
 
             //1. PUT a new log record
             var response = client.Put<LogResponse>(_logResourceUrl, SingleLogRecord);
@@ -76,7 +78,8 @@ namespace GcomprisBackend.IntegrationTests
             //Check whether the received record matches the sent record in Json format
             Assert.AreEqual(SingleLogRecord.ToJson(), logResponse.First().ToJson());
 
-          }
+
+        }
 
         [TearDown]
         public void CleanUp()

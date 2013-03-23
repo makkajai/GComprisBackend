@@ -4,6 +4,7 @@ using ServiceStack.Logging;
 using ServiceStack.Logging.Support.Logging;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
+using ServiceStack.Text;
 
 namespace GcomprisBackend.IntegrationTests
 {
@@ -20,6 +21,8 @@ namespace GcomprisBackend.IntegrationTests
             AppHost = new TestAppHostHttpListener();
             AppHost.Init();
             AppHost.Start(ListeningOn);
+
+            JsConfig.DateHandler = JsonDateHandler.ISO8601;
         }
 
         [TestFixtureTearDown]
