@@ -4,24 +4,11 @@ CREATE TABLE boards
 (
 	board_id INTEGER,
 	name TEXT,
-	section_id INTEGER,
-	section TEXT,
-	author TEXT,
-	type TEXT,
-	mode TEXT,
 	difficulty INTEGER,
-	icon TEXT,
-	boarddir TEXT,
-	mandatory_sound_file TEXT,
-	mandatory_sound_dataset TEXT,
-	filename TEXT,
 	title TEXT,
 	description TEXT,
 	prerequisite TEXT,
-	goal TEXT,
-	manual TEXT,
-	credit TEXT,
-	demo INTEGER
+	goal TEXT
 )
 ;
 
