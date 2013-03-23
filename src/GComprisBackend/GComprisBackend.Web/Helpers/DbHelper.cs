@@ -10,9 +10,9 @@ namespace GComprisBackend.Web.Helpers
 
         public static IDbConnection GetConnection()
         {
-            var connString = "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=GComprisBackend;"; //Environment.GetEnvironmentVariable(ConnStringVariable);
+            var connString = Environment.GetEnvironmentVariable(ConnStringVariable);
             if(string.IsNullOrEmpty(connString))
-                throw new Exception("GCompris Backend connection string not found - ensure that the GComprisBackend_DB env variable has been setup (and that you have restarted the system after setting it up)");
+                throw new Exception("GCompris Backend connection string not found - ensure that the GComprisBackend_DB env variable has been setup");
             return new OrmLiteConnectionFactory(connString).OpenDbConnection();
         }
     }

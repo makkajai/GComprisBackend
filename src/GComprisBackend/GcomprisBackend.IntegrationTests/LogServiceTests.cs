@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using GComprisBackend.ServiceModel;
 using GComprisBackend.ServiceModel.Types;
@@ -7,6 +8,7 @@ using NUnit.Framework;
 using ServiceStack.OrmLite;
 using ServiceStack.OrmLite.PostgreSQL;
 using ServiceStack.ServiceClient.Web;
+using ServiceStack.Text;
 
 namespace GcomprisBackend.IntegrationTests
 {
@@ -65,6 +67,12 @@ namespace GcomprisBackend.IntegrationTests
 
             //Check whether the list has one record
             Assert.AreEqual(1, logResponse.Count);
+
+            //Check whether the received record matches the sent record in Json format
+            Assert.AreEqual(SingleLogRecord.ToJson(), logResponse.First().ToJson());
+
+            
+
         }
 
         [TearDown]
