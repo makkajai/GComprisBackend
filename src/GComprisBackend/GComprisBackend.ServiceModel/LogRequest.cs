@@ -30,8 +30,6 @@ namespace GComprisBackend.ServiceModel
         public String UserName { get; set; }
 
         public DateTime FromDate { get; set; }
-
-        public Boolean Latest { get; set; }
     }
 
     public class LogResponse

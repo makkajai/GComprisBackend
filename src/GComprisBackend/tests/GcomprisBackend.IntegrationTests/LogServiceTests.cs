@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using GComprisBackend.ServiceModel;
-using GComprisBackend.ServiceModel.Types;
 using GComprisBackend.Web.Helpers;
 using NUnit.Framework;
 using ServiceStack.OrmLite;

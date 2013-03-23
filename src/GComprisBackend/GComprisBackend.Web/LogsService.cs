@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using GComprisBackend.ServiceModel;
+using GComprisBackend.Web.Helpers;
 using ServiceStack.ServiceInterface;
 
 namespace GComprisBackend.Web
@@ -15,7 +16,7 @@ namespace GComprisBackend.Web
         /// <returns></returns>
         public object Put(LogResource log)
         {
-            data.Add(log);
+            LogData.Save(log);
             return new LogResponse {Success = true};
         }
 
@@ -26,7 +27,7 @@ namespace GComprisBackend.Web
         /// <returns></returns>
         public object Get(LogRequest log)
         {
-            return data;
+            return LogData.GetByUser(log.UserName);
         }
     }
 }

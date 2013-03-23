@@ -1,13 +1,13 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using GComprisBackend.ServiceModel;
 using GComprisBackend.ServiceModel.Types;
 using ServiceStack.OrmLite;
 
 namespace GComprisBackend.Web.Helpers
 {
-    public static class LogData
+    public class LogData
     {
-        public static void Save(this LogResource logResource)
+        public static void Save(LogResource logResource)
         {
             using (var db = DbHelper.GetConnection())
             {
@@ -25,6 +25,21 @@ namespace GComprisBackend.Web.Helpers
                     };
 
                 db.Save(log);
+            }
+        }
+
+        private const string LogsQuery =
+            "select Date, Duration, Level, Status, SubLevel, u.Login, b.Name as BoardName " +
+            "from logs l " +
+            "inner join users u on l.user_id = u.user_id " +
+            "inner join boards b on l.board_id = b.board_id " +
+            "where u.login = {0}";
+
+        public static List<LogResource> GetByUser(string login)
+        {
+            using (var db = DbHelper.GetConnection())
+            {
+                return db.Select<LogResource>(LogsQuery, login);
             }
         }
     }

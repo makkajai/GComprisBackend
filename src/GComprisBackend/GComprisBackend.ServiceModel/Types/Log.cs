@@ -3,6 +3,7 @@ using ServiceStack.DataAnnotations;
 
 namespace GComprisBackend.ServiceModel.Types
 {
+    [Alias("logs")]
     public class Log
     {
         [Alias("date"), PrimaryKey]
