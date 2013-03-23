@@ -14,7 +14,7 @@ namespace GComprisBackend.Web
         public override void Configure(Container container)
         {
             //TODO: change this
-		    LogManager.LogFactory = new ConsoleLogFactory();
+            LogManager.LogFactory = new ConsoleLogFactory();
 
             SetConfig(new EndpointHostConfig
             {
