@@ -19,6 +19,11 @@ namespace GcomprisBackend.IntegrationTests
     /// 
     /// The test also sets up the test user and then cleans up after itself so that there is no manual mucking 
     /// around to be done
+    /// 
+    /// Similar to the Web service, this test project depends on the environment variable GComprisBackend_DB being 
+    /// setup and pointed to the postgresql database that serves as the datastore for this application.
+    /// 
+    /// For setting up the database, use the DBSetupScripts "GCompris-Service-Data-Model.sql" in the src/DbScript folder
     /// </summary>
     [TestFixture]
     public class LogServiceTests: BaseTests
