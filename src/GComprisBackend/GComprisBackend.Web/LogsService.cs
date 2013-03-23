@@ -19,7 +19,7 @@ namespace GComprisBackend.Web
 
 
         /// <summary>
-        /// Respond to the POST request - post is expected only with multiple records
+        /// Respond to the POST request on /logs - post is expected only with multiple records
         /// </summary>
         /// <param name="logs">List of logs </param>
         /// <returns></returns>
@@ -30,13 +30,13 @@ namespace GComprisBackend.Web
         }
 
         /// <summary>
-        /// 
+        /// Respond to the GET request on /logs/{Login} - get is expected to return multiple records
         /// </summary>
         /// <param name="log"></param>
         /// <returns></returns>
         public object Get(LogRequest log)
         {
-            return LogData.GetByUser(log.UserName);
+            return LogData.GetByUser(log.Login);
         }
     }
 }

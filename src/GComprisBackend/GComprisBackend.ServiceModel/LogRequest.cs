@@ -30,10 +30,10 @@ namespace GComprisBackend.ServiceModel
     /// <summary>
     /// Represents a message for getting Log resources
     /// </summary>
-    [Route("/logs/{UserName}", "GET")]
+    [Route("/logs/{Login}", "GET")]
     public class LogRequest
     {
-        public String UserName { get; set; }
+        public String Login { get; set; }
 
         public DateTime FromDate { get; set; }
     }
