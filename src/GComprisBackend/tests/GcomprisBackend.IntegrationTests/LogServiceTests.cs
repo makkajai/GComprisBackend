@@ -187,7 +187,7 @@ namespace GcomprisBackend.IntegrationTests
         }
 
         [Test]
-        public void DoesGETReturnOnlyLatestRecord()
+        public void DoesGETReturnOnlyLatestRecordForEachBoard()
         {
             //Given that a collection of logs is PUT with at least two logs for a single board, 
             // when we do GET for this user, do we receive only the latest logs back.
