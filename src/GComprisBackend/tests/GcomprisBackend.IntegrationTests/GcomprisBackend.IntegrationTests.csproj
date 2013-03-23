@@ -89,15 +89,17 @@
     <Compile Include="Support\TestAppHostListener.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GComprisBackend.ServiceModel\GComprisBackend.ServiceModel.csproj">
+    <ProjectReference Include="..\..\GComprisBackend.ServiceModel\GComprisBackend.ServiceModel.csproj">
       <Project>{fb06c3aa-a6d6-43fe-acce-da4b92f211ad}</Project>
       <Name>GComprisBackend.ServiceModel</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GComprisBackend.Web\GComprisBackend.Web.csproj">
+    <ProjectReference Include="..\..\GComprisBackend.Web\GComprisBackend.Web.csproj">
       <Project>{e4a9c39f-a811-4b5b-96c1-13d6467df4d8}</Project>
       <Name>GComprisBackend.Web</Name>
     </ProjectReference>
