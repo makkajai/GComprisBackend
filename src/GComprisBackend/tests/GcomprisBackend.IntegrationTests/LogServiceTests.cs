@@ -27,6 +27,7 @@ namespace GcomprisBackend.IntegrationTests
     [TestFixture]
     public class LogServiceTests: BaseTests
     {
+        #region variable and constant declarations
         private const string LogResource= "logs";
         private string _logResourceUrl;
 
@@ -40,6 +41,33 @@ namespace GcomprisBackend.IntegrationTests
 
         private static readonly LogResource SingleLogRecord 
             = new LogResource{Date = DateTime.Parse("2012-11-09 21:21:42"), Duration = 74, Login = "test", BoardName = "algebra_by", Level = 1, SubLevel = 1, Status = 0};
+
+        private static readonly List<LogResource> MultiLogRecords
+            = new List<LogResource>
+                {
+                    new LogResource
+                        {
+                            Date = DateTime.Parse("2012-11-09 21:21:42"),
+                            Duration = 74,
+                            Login = "test",
+                            BoardName = "algebra_by",
+                            Level = 1,
+                            SubLevel = 1,
+                            Status = 0
+                        },
+                    new LogResource
+                        {
+                            Date = DateTime.Parse("2012-11-10 21:21:42"),
+                            Duration = 75,
+                            Login = "test",
+                            BoardName = "algebra_plus",
+                            Level = 1,
+                            SubLevel = 1,
+                            Status = 0
+                        },
+                };
+
+        #endregion
 
         [SetUp]
         public void SetUp()
@@ -75,7 +103,28 @@ namespace GcomprisBackend.IntegrationTests
 
             //Check whether the received record matches the sent record in Json format
             Assert.AreEqual(SingleLogRecord.ToJson(), logResponse.First().ToJson());
+        }
 
+        [Test]
+        public void DoesSendingMultipleRecordsWork()
+        {
+            //Given that a collection of logs is PUT, when we do GET for this user, do we receive the logs back.
+            var client = new JsonServiceClient();
+            Console.WriteLine("Json data being sent: {0}", MultiLogRecords.ToJson());
+            
+            //1. POST new log collection
+            var response = client.Post<LogResponse>(_logResourceUrl, MultiLogRecords);
+            Assert.IsTrue(response.Success);
+
+            //GET all the logs for the test user
+            var logResponse = client.Get<List<LogResource>>(string.Format("{0}/{1}", _logResourceUrl, "test"));
+
+            //check whether the list has two records as sent
+            Assert.AreEqual(2, logResponse.Count);
+
+            //check whether the list is as sent - note that the expected result is that logs are sorted
+            //date-wise desc, so compare that way
+            Assert.AreEqual(MultiLogRecords.ToJson(), logResponse.ToJson());
 
         }
 

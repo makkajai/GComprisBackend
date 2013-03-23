@@ -17,6 +17,18 @@ namespace GComprisBackend.Web
             return new LogResponse {Success = true};
         }
 
+
+        /// <summary>
+        /// Respond to the POST request - post is expected only with multiple records
+        /// </summary>
+        /// <param name="logs">List of logs </param>
+        /// <returns></returns>
+        public object Post(LogResources logs)
+        {
+            LogData.Save(logs);
+            return new LogResponse {Success = true};
+        }
+
         /// <summary>
         /// 
         /// </summary>

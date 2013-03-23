@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using ServiceStack.ServiceHost;
 
 namespace GComprisBackend.ServiceModel
@@ -19,6 +20,11 @@ namespace GComprisBackend.ServiceModel
         public int SubLevel { get; set; }
 
         public int Status { get; set; }
+    }
+
+    [Route("/logs", "POST")]
+    public class LogResources : List<LogResource>
+    {
     }
 
     /// <summary>
