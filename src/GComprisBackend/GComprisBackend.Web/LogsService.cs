@@ -36,7 +36,7 @@ namespace GComprisBackend.Web
         /// <returns></returns>
         public object Get(LogRequest log)
         {
-            return LogData.GetByUser(log.Login, log.FromDate);
+            return LogData.GetByStudent(log.Login, log.FromDate);
         }
     }
 }

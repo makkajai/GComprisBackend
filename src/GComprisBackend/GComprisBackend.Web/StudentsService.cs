@@ -1,6 +1,6 @@
 ﻿namespace GComprisBackend.Web
 {
-    class UsersService
+    class StudentsService
     {
     }
 }

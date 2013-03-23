@@ -16,7 +16,7 @@ CREATE TABLE logs
 (
 	date timestamp,
 	duration INTEGER,
-	user_id INTEGER,
+	student_id INTEGER,
 	board_id INTEGER,
 	level INTEGER,
 	sublevel INTEGER,
@@ -25,9 +25,9 @@ CREATE TABLE logs
 )
 ;
 
-CREATE TABLE users
+CREATE TABLE students
 (
-	user_id INTEGER,
+	student_id INTEGER,
 	login TEXT,
 	lastname TEXT,
 	firstname TEXT

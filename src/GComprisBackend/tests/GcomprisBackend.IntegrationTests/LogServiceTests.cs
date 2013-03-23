@@ -32,12 +32,12 @@ namespace GcomprisBackend.IntegrationTests
         private string _logResourceUrl;
 
         private const string CreateTestUser =
-            "insert into users(user_id, login, lastname, firstname) values (1000000, 'test', 'testlast', 'testfirst')";
+            "insert into students(student_id, login, lastname, firstname) values (1000000, 'test', 'testlast', 'testfirst')";
 
         private const string DeleteLogs =
-            "delete from logs where user_id in (select user_id from users where login='test')";
+            "delete from logs where student_id in (select student_id from students where login='test')";
 
-        private const string DeleteTestUser = "delete from users where login = 'test'";
+        private const string DeleteTestUser = "delete from students where login = 'test'";
 
         private static readonly LogResource SingleLogRecord 
             = new LogResource{Date = DateTime.Parse("2012-11-09 21:21:42"), Duration = 74, Login = "test", BoardName = "algebra_by", Level = 1, SubLevel = 1, Status = 0};

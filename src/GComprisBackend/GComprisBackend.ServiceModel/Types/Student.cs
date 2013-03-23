@@ -2,10 +2,10 @@
 
 namespace GComprisBackend.ServiceModel.Types
 {
-    [Alias("users")]
-    public class User
+    [Alias("students")]
+    public class Student
     {
-        [Alias("user_id")]
+        [Alias("student_id")]
         public int Id { get; set; }
 
         [Alias("login")]

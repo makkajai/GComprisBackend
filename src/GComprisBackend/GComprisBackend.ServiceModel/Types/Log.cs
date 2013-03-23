@@ -12,8 +12,8 @@ namespace GComprisBackend.ServiceModel.Types
         [Alias("duration")]
         public int Duration { get; set; }
 
-        [Alias("user_id")]
-        public int UserId { get; set; }
+        [Alias("student_id")]
+        public int StudentId { get; set; }
 
         [Alias("board_id")]
         public int BoardId { get; set; }
