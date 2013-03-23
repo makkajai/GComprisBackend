@@ -126,6 +126,22 @@ namespace GcomprisBackend.IntegrationTests
                     },
             };
 
+        private static readonly List<LogResource> ExpectedLatestLogsOnlyWithDate = new List<LogResource>
+            {
+                new LogResource
+                    {
+                        Date = DateTime.Parse("2012-11-10 21:21:42"),
+                        Duration = 75,
+                        Login = "test",
+                        BoardName = "algebra_plus",
+                        Level = 1,
+                        SubLevel = 1,
+                        Status = 0
+                    },
+            };
+
+        private string _url;
+
         #endregion
 
         [SetUp]
@@ -208,6 +224,32 @@ namespace GcomprisBackend.IntegrationTests
             // note that the expected result is that logs are sorted
             //date-wise desc, so compare that way
             Assert.AreEqual(ExpectedLatestLogsOnly.OrderByDescending(p=>p.Date).ToList().ToJson(), logResponse.ToJson());
+        }
+
+        [Test]
+        public void DoesGETWithFromDateReturnProperData()
+        {
+            //Given that a collection of logs is PUT with at least two logs for a single board, 
+            // when we do GET for this user, do we receive only the latest logs back.
+            var client = new JsonServiceClient();
+            Console.WriteLine("Json data being sent: {0}", MultiLogRecordsWithSameBoard.ToJson());
+            
+            //1. POST new log collection
+            var response = client.Post<LogResponse>(_logResourceUrl, MultiLogRecordsWithSameBoard);
+            Assert.IsTrue(response.Success);
+
+            //GET all the logs for the test user
+            _url = string.Format("{0}/{1}?FromDate={2}", _logResourceUrl, "test", DateTime.Parse("2012-11-10 20:21:42"));
+            Console.WriteLine("Url called: {0}", _url);
+            var logResponse = client.Get<List<LogResource>>(_url);
+
+            //check whether the list has two records as sent
+            Assert.AreEqual(1, logResponse.Count);
+
+            //check whether the list is as sent, but only the latest record for each activity - 
+            // note that the expected result is that logs are sorted
+            //date-wise desc, so compare that way
+            Assert.AreEqual(ExpectedLatestLogsOnlyWithDate.ToJson(), logResponse.ToJson());
         }
 
         [TearDown]

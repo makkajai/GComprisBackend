@@ -14,7 +14,7 @@ CREATE TABLE boards
 
 CREATE TABLE logs
 (
-	date TEXT,
+	date timestamp,
 	duration INTEGER,
 	user_id INTEGER,
 	board_id INTEGER,
