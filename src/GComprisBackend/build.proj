@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Compile" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <ProjectOutputDirectory>bin\$(Configuration)</ProjectOutputDirectory>
+
+    <ProjectName>GComprisBackend</ProjectName>
+	
+    <!-- MSBuild system overrides and locations -->
+	
+	<!-- Root is added so that it can be overridden whenever this build.proj is imported from another build file (for e.g. windows services) -->
+    <Root Condition=" '$(Root)' == '' ">$(MSBuildProjectDirectory)</Root>
+	<MSBuildPath>$(Root)\lib\MSBuild</MSBuildPath>
+    <MSBuildCommunityTasksPath>$(MSBuildPath)\MSBuildCommunityTasks-Nightly</MSBuildCommunityTasksPath>
+    <MSBuildExtentionPackPath>$(MSBuildPath)\MSBuildExtensionPack</MSBuildExtentionPackPath>
+	<ExtensionTasksPath>$(MSBuildExtentionPackPath)\</ExtensionTasksPath>
+    <!-- ASP.NET build / IIS deploy settings -->
+    <LibDirectory>$(Root)\lib</LibDirectory>
+    <WebProjectDirectory>$(Root)\GComprisBackend.Web</WebProjectDirectory>
+    <PrecompiledWebDirectory>$(Root)\PrecompiledWeb</PrecompiledWebDirectory>
+    <StageWebDirectory>$(Root)\StageWeb</StageWebDirectory>
+    <WebVirtDirectoryName>$(ProjectName)</WebVirtDirectoryName>
+    <WebServiceVirtDirectoryName>$(WSProjectName)</WebServiceVirtDirectoryName>
+    <WebDeploymentDirectory>$(MSBuildPath)\WebDeployment\v10.0</WebDeploymentDirectory>
+    <WebVirtDirectoryPort>80</WebVirtDirectoryPort>
+	
+    <NUnitLibPath>$(LibDirectory)\NUnit</NUnitLibPath>
+	<ErrorLogFileName>error.log</ErrorLogFileName>
+    <DeployApplicationUrl>http://localhost/gcompris-backend</DeployApplicationUrl>
+    <DeploymentFolderPath>c:\temp</DeploymentFolderPath>
+    <WebProjectDeploymentFolderPath>$(DeploymentFolderPath)\$(ProjectName)</WebProjectDeploymentFolderPath>
+    
+    <!--Enviornment Variables-->
+    <CopyWebConfig>false</CopyWebConfig>
+    
+    <!--Project Settings-->
+    <CompilationDebug>true</CompilationDebug>
+    <CustomErrorMode>Off</CustomErrorMode>
+    <SmtpHost>localhost</SmtpHost>
+
+  </PropertyGroup>
+
+  <!-- This needs to be imported after we set the MSBuildPath variable first (see above) -->
+  <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets" />
+
+  <!-- MSBuild Extension Pack tasks, etc. -->
+  <Import Project="$(MSBuildExtentionPackPath)\MSBuild.ExtensionPack.tasks" />
+  
+  <UsingTask TaskName="Microsoft.Sdc.Tasks.SetEnvironmentVariable"
+             AssemblyFile="$(MSBuildPath)\SDCTasks\Microsoft.Sdc.Tasks.dll"/>
+			 
+  <!-- Adding reference of DLL that being used for AspNetMerge task  -->
+  <UsingTask TaskName="Microsoft.WebDeployment.Tasks.AspNetMerge" AssemblyFile="$(WebDeploymentDirectory)\Microsoft.WebDeployment.Tasks.dll"/>
+
+  <!-- ####################################################################### -->
+  <!-- Projects Name, and Assembly path -->
+  <!-- ####################################################################### -->
+  <PropertyGroup>
+    <ServiceModelDir>$(Root)\GComprisBackend.ServiceModel</ServiceModelDir>
+    <ServiceModelProject>$(ServiceModelDir)\GComprisBackend.ServiceModel.csproj</ServiceModelProject>
+    <ServiceModelAssembly>$(ServiceModelDir)\$(ProjectOutputDirectory)\GComprisBackend.ServiceModel.dll</ServiceModelAssembly>
+
+    <WebDir>$(Root)\GComprisBackend.Web</WebDir>
+    <WebProject>$(WebDir)\GComprisBackend.Web.csproj</WebProject>
+    <WebAssembly>$(WebDir)\$(ProjectOutputDirectory)\GComprisBackend.Web.dll</WebAssembly>
+
+    <IntegrationTestsDir>$(Root)\tests\GcomprisBackend.IntegrationTests</IntegrationTestsDir>
+    <IntegrationTestsProject>$(IntegrationTests)\GcomprisBackend.IntegrationTests.csproj</IntegrationTestsProject>
+    <IntegrationTestsAssembly>$(IntegrationTestsDir)\$(ProjectOutputDirectory)\GcomprisBackend.IntegrationTests.dll</IntegrationTestsAssembly>
+
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- 
+        I'm forced to use this hack that I just came up with because MSBuild is not flexible enough.
+        What I want is to be able to exclude the 1591 warning (no comments for a public member)
+        while doing day to day builds, but allow the warning to be seen when generating Documentation.
+        There is no way to check which target is being run, so I can't set this group in a Condition.
+        That means in the Documentation target, I just blank out this property.
+        In all cases, I append this property to the MSBuild task that compiles the projects.
+        
+        Note that the numerous references to setting $(NoWarn) on the Internet do not work. The extra
+        warning number never gets added from the project file properties to the csc compile task spawned
+        by the MSBuild task.
+        -->
+    <ExtraCmdLineProperties>NoWarn=1591</ExtraCmdLineProperties>
+
+  </PropertyGroup>
+  
+  <!-- Defining items group of Assemblies that need to be put into the StageWeb's bin folder -->
+  <ItemGroup>
+    <DependencyDLLs Include="$(ServiceModelAssembly)" />
+  </ItemGroup>
+  
+  <!-- ####################################################################### -->
+  <!-- This target is used to clean all of the projects before you build them. -->
+  <!-- ####################################################################### -->
+  <Target Name="Clean">
+    <ItemGroup>
+      <TestOutput Include="*.Tests.xml" />
+    </ItemGroup>
+
+    <Delete Files="@(TestOutput)" />
+    <MSBuild Projects="@(ProjectsToBuild)" Targets="Clean" Properties="Configuration=$(Configuration);"/>
+    <RemoveDir Directories="$(PrecompiledWebDirectory);$(PrecompiledWebServiceDirectory);$(StageWebDirectory);$(StageWebServiceDirectory);" />
+  </Target>
+  
+  <!-- ####################################################################### -->
+  <!-- This target is used to Compile all of the projects. -->
+  <!-- ####################################################################### -->
+  <Target Name="Compile" DependsOnTargets="Clean">
+    <ItemGroup>
+      <ProjectsToBuild Include="$(ServiceModelProject)" />
+      <ProjectsToBuild Include="$(WebProject)" />
+    </ItemGroup>
+
+    <MSBuild Projects ="@(ProjectsToBuild)"
+       ContinueOnError ="false"
+       Properties="Configuration=$(Configuration);$(ExtraCmdLineProperties);MSBuildExtensionsPath32=$(MSBuildPath);">
+      <Output ItemName="CoreAssemblies" TaskParameter="TargetOutputs"/>
+    </MSBuild>
+
+    <Message Text="Built: @(CoreAssemblies)"/>
+  </Target>
+  
+  <!-- ####################################################################### -->
+  <!-- It compiles the Unit Test projects and all its dependent projects       -->
+  <!-- ####################################################################### -->
+  <Target Name="CompileTests" DependsOnTargets="Compile">
+    <ItemGroup>
+      <TestProjectReferences Include="$(IntegrationTestsDir)" />
+    </ItemGroup>
+
+    <!-- Clean the projects -->
+    <MSBuild Projects="@(TestProjectReferences)" Targets="Clean" Properties="Configuration=$(Configuration);"/>
+
+    <!-- Build the projects -->
+    <MSBuild Projects="@(TestProjectReferences)" Targets="Build" Properties="Configuration=$(Configuration);">
+      <Output TaskParameter="TargetOutputs" ItemName="TestReferenceAssemblies" />
+    </MSBuild>
+
+    <Message Text="Built: @(TestReferenceAssemblies)"/>
+  </Target>  
+  
+  <!-- ####################################################################### -->
+  <!-- It Runs Unit tests  -->
+  <!-- ####################################################################### -->
+  <Target Name="RunTests" DependsOnTargets="CompileTests;RunTestsOnly;">
+  </Target>
+ 
+  <!-- ####################################################################### -->
+  <!-- It Merges it in a single assembly. It then copies the output in the StageWeb Directory -->
+  <!-- ####################################################################### -->
+  <Target Name="CreateStageWeb">
+    <!-- The AspNetCompiler task requires all of the referenced assemblies to already be there -->
+    <!--<Copy SourceFiles="@(DependencyDLLs)" DestinationFolder="$(WebProjectDirectory)\Bin"/>-->
+
+    <AspNetCompiler
+       VirtualPath="/$(WebVirtDirectoryName)"
+       PhysicalPath="$(WebProjectDirectory)"
+       TargetPath="$(PrecompiledWebDirectory)"
+       Force="true"
+       Updateable ="true"
+       Debug="true" />
+
+    <AspNetMerge
+       ExePath="$(WebDeploymentDirectory)"
+       ApplicationPath="$(PrecompiledWebDirectory)"
+       SingleAssemblyName="$(ProjectName).Merged.dll" />
+
+    <ItemGroup>
+      <PrecompiledWebFiles Include="$(PrecompiledWebDirectory)\**\*.*" Exclude="$(PrecompiledWebDirectory)\logs\**\*.*" />
+    </ItemGroup>
+
+    <Copy
+       SourceFiles="@(PrecompiledWebFiles)"
+       DestinationFiles="@(PrecompiledWebFiles->'$(StageWebDirectory)\%(RecursiveDir)%(Filename)%(Extension)')" />  
+  </Target>
+
+
+  <!-- ####################################################################### -->
+  <!-- It Compiles the Web Project and Merges it in a single assembly. It then copies the output in the StageWeb Directory -->
+  <!-- ####################################################################### -->
+  <Target Name="PublishWeb" DependsOnTargets="Compile;CreateStageWeb">
+  </Target>  
+
+  <!-- ####################################################################### -->
+  <!-- It deletes and create the Virtual directory in IIS for the Web and WebService projects -->
+  <!-- ####################################################################### -->
+  <Target Name="SetupVirtual">
+    <WebDirectoryDelete  VirtualDirectoryName="$(WebVirtDirectoryName)" ContinueOnError="true" />
+
+    <WebDirectoryCreate VirtualDirectoryName="$(WebVirtDirectoryName)"
+            VirtualDirectoryPhysicalPath="$(StageWebDirectory)"
+            ServerPort="$(WebVirtDirectoryPort)"
+            />
+    <InstallAspNet Version="VersionLatest" Path="$(WebVirtDirectoryName)" ToolPath="C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319" />
+  </Target>
+
+  <!-- ####################################################################### -->
+  <!-- Builds and compiles all project and create their output in the StageWeb and StageWebService Directories. 
+       It also replaces the connection string in StageWeb's web.config file.
+  -->
+  <!-- ####################################################################### -->
+  <Target Name="Build" DependsOnTargets="PublishWeb">
+  </Target>
+  
+  <!-- ####################################################################### -->
+  <!-- It gets latest, builds and compiles all project and create their output in the StageWeb Directories. 
+       It also replaces the connection string in StageWeb's web.config file.
+  -->
+  <!-- ####################################################################### -->
+  <Target Name="Deploy" DependsOnTargets="Build">
+  </Target>
+  
+  <!-- ####################################################################### -->
+  <!-- It gets latest, builds and compiles all project and create their output in the StageWeb Directories. 
+       It also replaces the connection string in StageWeb's web.config file.
+       It also runs migrations on database
+       It also delete and recreate the Virtual Directory in IIS for StageWeb
+  -->
+  <!-- ####################################################################### -->
+  <Target Name="Publish" DependsOnTargets="Build;SetupVirtual">
+  </Target>
+
+  <!-- ####################################################################### -->
+  <!-- It copies contents of StageWeb to specifed Server in .rsp file  -->
+  <!-- ####################################################################### -->
+  <Target Name="CopyStageWebToServer">
+    <ItemGroup>
+      <StageWebFilesToDeploy Include="$(StageWebDirectory)\**\*.*" Exclude="$(StageWebDirectory)\web.config;$(StageWebDirectory)\obj\**;$(StageWebDirectory)\Images\**;$(StageWebDirectory)\*.csproj;$(StageWebDirectory)\*.user;$(StageWebDirectory)\bin\Telerik.Web.UI.dll;$(StageWebDirectory)\Skins\**;$(StageWebDirectory)\**\*.db" />
+	  
+	  <StageWebConfig Include="$(StageWebDirectory)\web.config" />
+      <StageWebSkinFolderToDeploy Include="$(StageWebDirectory)\Skins\**" />
+      <StageWebImageFolderToDeploy Include="$(StageWebDirectory)\Images\**" />
+    </ItemGroup>
+
+    <Copy SourceFiles="@(StageWebFilesToDeploy)"
+          DestinationFiles="@(StageWebFilesToDeploy->'$(WebProjectDeploymentFolderPath)\%(RecursiveDir)%(Filename)%(Extension)')" />
+
+	<Copy Condition="$(CopyWebConfig)" SourceFiles="@(StageWebConfig)"
+          DestinationFiles="@(StageWebConfig->'$(WebProjectDeploymentFolderPath)\web.config')" />
+		  
+    <Copy SourceFiles="@(StageWebSkinFolderToDeploy)"
+          DestinationFiles="@(StageWebSkinFolderToDeploy->'$(WebProjectSkinsFolderPath)\%(RecursiveDir)%(Filename)%(Extension)')" />
+
+    <Copy SourceFiles="@(StageWebImageFolderToDeploy)"
+          DestinationFiles="@(StageWebImageFolderToDeploy->'$(WebProjectImagesFolderPath)\%(RecursiveDir)%(Filename)%(Extension)')" />
+  </Target>
+</Project>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+		<ClassLibraryOutputDirectory>bin\$(Configuration)</ClassLibraryOutputDirectory>
+        <MigrationsProject>D:\playground\projarea\csharp\3pdDispatchOfficeGit\test\setupScripts\setup.revscript.Migration.csproj</MigrationsProject>
+		<!-- MSBuild system overrides and locations -->
+		
+		<MigratorTasksPath>.</MigratorTasksPath>
+    </PropertyGroup>
+
+    <Import Project="$(MigratorTasksPath)\Migrator.Targets" />
+
+    <ItemGroup>
+        <MigrationProjectReferences Include="$(MigrationsProject)" />
+    </ItemGroup>
+
+    <Target Name="Build-Migrations">
+        <MSBuild Projects="@(MigrationProjectReferences)" Targets="Build">
+            <Output TaskParameter="TargetOutputs" ItemName="MigrationAssemblies" />
+        </MSBuild>
+
+        <Message Text="Built: @(MigrationAssemblies)"/>
+    </Target>
+
+    <Target Name="Migrate" DependsOnTargets="Build-Migrations">
+        <Migrate Provider="SqlServer"
+            Connectionstring="Data Source=localhost;Initial Catalog=Actualv1016;User Id=SqlConnect;Password=Pench2006"
+            Migrations="@(MigrationAssemblies)"/>
+    </Target>
+</Project>
