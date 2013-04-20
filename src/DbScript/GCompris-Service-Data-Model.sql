@@ -27,7 +27,7 @@ CREATE TABLE logs
 
 CREATE TABLE students
 (
-	student_id INTEGER,
+	student_id SERIAL,
 	login TEXT,
 	lastname TEXT,
 	firstname TEXT
