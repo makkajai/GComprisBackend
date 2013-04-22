@@ -32,6 +32,8 @@ namespace GComprisBackend.Web.Helpers
 
         public static void Save(LogResources logResources)
         {
+            //do not process further
+            if (logResources.Count == 0) return;
             //instead of saving one by one, do batch queries on user and board, and then bulk save logs
             using (var db = DbHelper.GetConnection())
             {
