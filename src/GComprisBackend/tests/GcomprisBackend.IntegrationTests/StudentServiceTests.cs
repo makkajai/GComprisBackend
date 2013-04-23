@@ -29,18 +29,19 @@ namespace GcomprisBackend.IntegrationTests
         #region variable and constant declarations
         private const string StudentsResource= "students";
         private string _studentsResourceUrl;
+        private const string TestStudentId = "teststudent";
 
         private const string CreateTestUser =
-            "insert into students(student_id, login, lastname, firstname) values (1000000, 'test', 'testlast', 'testfirst')";
+            "insert into students(student_id, login, lastname, firstname) values (1000000, '"+TestStudentId+"', 'testlast', 'testfirst')";
 
         private static readonly StudentResource ExpectedStudent = new StudentResource
                 {
-                    Login = "test",
+                    Login = TestStudentId,
                     FirstName = "testfirst",
                     LastName = "testlast"
                 };
 
-        private const string DeleteTestUser = "delete from students where login = 'test'";
+        private const string DeleteTestUser = "delete from students where login = '" + TestStudentId + "'";
 
         #endregion
 
@@ -63,7 +64,7 @@ namespace GcomprisBackend.IntegrationTests
         public void DoesGETUserReturnData()
         {
             var client = new JsonServiceClient();
-            var student = client.Get<StudentResource>(string.Format("{0}/{1}", _studentsResourceUrl, "test"));
+            var student = client.Get<StudentResource>(string.Format("{0}/{1}", _studentsResourceUrl, TestStudentId));
             Assert.AreEqual(ExpectedStudent.ToJson(), student.ToJson()); 
         }
 
