@@ -5,6 +5,7 @@ CREATE TABLE boards
 	board_id INTEGER,
 	name TEXT,
 	difficulty INTEGER,
+	logo TEXT,
 	title TEXT,
 	description TEXT,
 	prerequisite TEXT,
