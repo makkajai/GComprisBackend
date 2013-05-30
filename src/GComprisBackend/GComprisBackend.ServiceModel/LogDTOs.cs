@@ -9,6 +9,11 @@ namespace GComprisBackend.ServiceModel
     {
         public DateTime Date { get; set; }
 
+        public String FormattedDate
+        {
+            get { return Date.ToString("yyyy-MM-dd hh:mm:ss"); }
+        }
+
         public int Duration { get; set; }
 
         public string Login { get; set; }
