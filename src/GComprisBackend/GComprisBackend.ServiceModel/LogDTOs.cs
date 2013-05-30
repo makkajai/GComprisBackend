@@ -11,7 +11,7 @@ namespace GComprisBackend.ServiceModel
 
         public String FormattedDate
         {
-            get { return Date.ToString("yyyy-MM-dd hh:mm:ss"); }
+            get { return Date.ToString("yyyy-MM-dd HH:mm:ss"); }
         }
 
         public int Duration { get; set; }
