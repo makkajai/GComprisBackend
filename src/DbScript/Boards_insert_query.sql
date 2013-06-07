@@ -175,3 +175,30 @@
 -- verify data
 
 Select * from boards
+
+
+select * from boards
+
+insert into boards	
+(board_id,
+	name,
+	difficulty,
+	title,
+	description,
+	prerequisite,
+	goal,
+	logo)
+values	
+('154','color_mix','4','Mixing color of paint','To understand color mixing.','','Mix the primary colors to match to the given color','color_mix.svg'),
+('155','color_mix_light','1','Mixing colors of light','Understanding mixing of colors of light.','','Mix the primary colors to match to the given color.','color_mix_light.svg'),
+('156','explore_farm_animals','2','Explore Farm Animals','Learn about farm animals, what sounds they make, and interesting facts.','','Learn to associate animal sounds with the animal name and what the animal looks like.','explore_farm_animals.svg'),
+('157','explore_world_animals','4','Explore World Animals','Learn about world animals, interesting facts and their location on a map.','','','explore_world_animals.svg'),
+('158','explore_world_music','4','Explore World Music','Learn about the music of the world.','','Develop a better understanding of the variety of music present in the world','explore_world_music.svg'),
+('159','intro_gravity','4','Intro gravity','Introduction to the concept of gravity','','Maintain the spaceship in the middle without crashing into the planets or the asteroids','intro_gravity.svg'),
+('160','land_safe','4','Land Safe','Understanding acceleration due to gravity.','','Pilot the spaceship towards the green landing area.','land_safe.svg'),
+('161','mining','1','Mining for gold','Use the mousewheel to approach the rockwall an look for gold nuggets.','You should be familiar with moving the mouse and clicking.','Learn to use the mousewheel to zoom in and out.','mining.svg'),
+('162','note_names','4','Name that Note!','Learn the names of the notes, in bass and treble clef, with the help of sounds and colors','None','To develop a good understanding of note position and naming convention. To prepare for the piano player and composition activity','note_names.svg'),
+('163','piano_composition','4','Piano Composition','An activity to learn how the piano keyboard works, how notes are written on a musical staff and explore music composition by loading and saving your work.','Familiarity with note naming conventions, note-names activity useful to learn this notation.','Develop an understanding of music composition, and increase interest in making music with a piano keyboard. This activity covers many fundamental aspects of music, but there is much more to explore about music composition. If you enjoy this activity but want a more advanced tool, try downloading MuseScore (http://musescore.org/en/download), an open source music notation tool.','piano_composition.svg'),
+('164','place_your_satellite','4','Place your satellite','Understanding effect of mass and distance on orbital velocity.','','Make sure the satellite does not crash or fly away','place_your_satellite.svg'),
+('165','play_piano','2','Play Piano!','Learn to play melodies on the piano keyboard!','Knowledge of musical notation and musical staff. Play the activity named ''Piano Composition'' first.','Understand how the piano keyboard can play music as written on the musical staff.','play_piano.svg'),
+('166','play_rhythm','3','Play Rhythm','Learn to listen to, read, and play musical rhythms.','Simple understanding of musical rhythm and beat.','Learn to beat rhythms precisely and accurately based on what you see and hear.','play_rhythm.svg')
